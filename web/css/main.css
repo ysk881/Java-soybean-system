@@ -1,0 +1,69 @@
+.menus-box {
+	max-width: 260px;
+	min-width: 260px;
+	background-color: #019858;
+}
+
+.menus-box .brand {
+	cursor: pointer;
+}
+
+.menus-box .user-img {
+	width: 106px;
+	height: 106px;
+}
+.menus-box .list-group .list-group-item::before,
+.menus-box .list-group .list-group-item::after {
+	content: ' ';
+	display: block;
+	background-color: 	#004B97;
+	position: absolute;
+}
+
+.menus-box .list-group .list-group-item::before {
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	left: 10px;
+}
+
+.menus-box .list-group .list-group-item::after {
+	width: 2px;
+	height: 100%;
+	left: 14px;
+}
+.main-box {
+	background-color: #F7F7F7;
+}
+.main-box .table th,td{
+	text-align: center;
+}
+.col-p-3{
+	width: 3%;
+}
+.col-p-4{
+	width: 4%;
+}
+.col-p-5{
+	width: 5%;
+}
+.col-p-8{
+	width: 8%;
+}
+.col-p-10{
+	width: 10%;
+}
+.truncate {
+	white-space: nowrap;
+	/* 防止换行 */
+	overflow: hidden;
+	/* 隐藏超出部分 */
+	text-overflow: ellipsis;
+	/* 显示省略号 */
+	max-width: 100px;
+	/* 限制最大宽度 */
+}
+.main-box .update-img {
+	width: 106px;
+	height: 106px;
+}

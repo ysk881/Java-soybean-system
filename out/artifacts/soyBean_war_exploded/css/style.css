@@ -1,0 +1,6 @@
+:root{
+	--color-cinerous:#73879C;
+}
+.text-cinerous{
+	color: var(--color-crinerous);
+}

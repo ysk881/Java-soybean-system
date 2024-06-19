@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kk.dao.VarietyMapper">
+
+    <!--增加一个品种-->
+    <insert id="addVariety" parameterType="Variety">
+        insert into soybean.variety(name, source, yield, month, rate, protect, area, illness, image)
+        values (#{name}, #{source}, #{yield}, #{month}, #{rate}, #{protect}, #{area}, #{illness}, #{image})
+    </insert>
+    <!--通过品种名查询品品种是否已存在-->
+    <select id="findName" resultType="Variety">
+        select *
+        from soybean.variety
+        where name = #{VName}
+    </select>
+
+
+    <!--根据品种批量删除一个品种-->
+    <delete id="deleteVariety">
+        delete
+        from soybean.variety
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+    <!--根据品种删除一个品种-->
+    <delete id="deleteVarietyById" parameterType="int">
+        delete
+        from soybean.variety
+        where id =#{id}
+    </delete>
+
+    <!--更新Variety-->
+    <update id="updateVariety" parameterType="Variety">
+        update soybean.variety
+        set name    = #{name},
+            source  = #{source},
+            yield   = #{yield},
+            month   = #{month},
+            rate    = #{rate},
+            protect = #{protect},
+            area    = #{area},
+            illness = #{illness},
+            image   = #{image}
+        where id = #{id}
+    </update>
+
+    <!--更新Variety-->
+    <update id="updateImg" parameterType="Variety">
+        update soybean.variety
+        set image   = #{image}
+        where id = #{id}
+    </update>
+
+    <!--获取全部Variety并导出-->
+    <select id="queryAllVariety" resultMap="VarietyMap">
+        select *
+        from soybean.variety,
+             soybean.agronomic
+        where variety.name = agronomic.name
+        order by id
+    </select>
+
+    <!--条件查询全部Variety-->
+    <select id="VarietyPage" resultMap="VarietyMap">
+        select *
+        from soybean.variety
+        <where>
+            <if test="name!=null and name!=''">
+                name like '%${name}%'
+            </if>
+            and illness like '%${illness}%'
+        </where>
+        order by id
+    </select>
+
+    <!--根据品种名查询,返回一个Variety-->
+    <select id="queryVarietyByname" resultMap="VarietyMap">
+        select *
+        from soybean.variety,
+             soybean.agronomic
+        where variety.name = #{Vname}
+          and variety.name = agronomic.name;
+    </select>
+    <!--结果映射标签、定义查询结果和返回类型之间的关联关系-->
+    <!--id属性表示这个映射关系的唯一标识、要求为一-->
+    <!--type属性表示返回的实体类-->
+    <!--property属性表示类中成员变量的名字-->
+    <!--column属性表示查询语句中字段的名字-->
+    <resultMap id="VarietyMap" type="Variety">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="source" column="source"/>
+        <result property="yield" column="yield"/>
+        <result property="month" column="month"/>
+        <result property="rate" column="rate"/>
+        <result property="protect" column="protect"/>
+        <result property="area" column="area"/>
+        <result property="illness" column="illness"/>
+        <result property="image" column="image"/>
+        <!--植物学-->
+        <association property="phytology" javaType="com.kk.pogo.Phytology">
+            <id property="agid" column="agid"/>
+            <result property="name" column="name"/>
+            <result property="flower" column="flower"/>
+            <result property="leaf" column="leaf"/>
+            <result property="seed" column="seed"/>
+            <result property="testa" column="testa"/>
+            <result property="hilum" column="hilum"/>
+            <result property="fuzz" column="fuzz"/>
+            <result property="contyledon" column="contyledon"/>
+        </association>
+        <!--生物学-->
+        <association property="biology" javaType="com.kk.pogo.Biology">
+            <id property="agid" column="agid"/>
+            <result property="name" column="name"/>
+            <result property="height" column="height"/>
+            <result property="pedicle" column="pedicle"/>
+            <result property="pod" column="pod"/>
+            <result property="branch" column="branch"/>
+            <result property="lodging" column="lodging"/>
+            <result property="biomass" column="biomass"/>
+            <result property="fertility" column="fertility"/>
+            <result property="habit" column="habit"/>
+            <result property="anthesis" column="anthesis"/>
+            <result property="afterbirth" column="afterbirth"/>
+            <result property="lifetime" column="lifetime"/>
+        </association>
+        <!--品质性状-->
+        <association property="quality" javaType="com.kk.pogo.Quality">
+            <id property="agid" column="agid"/>
+            <result property="name" column="name"/>
+            <result property="grain" column="grain"/>
+            <result property="grease" column="grease"/>
+            <result property="fat" column="fat"/>
+            <result property="protein" column="protein"/>
+            <result property="lipid" column="lipid"/>
+            <result property="salt" column="salt"/>
+            <result property="alkali" column="alkali"/>
+            <result property="cystine" column="cystine"/>
+            <result property="methionine" column="methionine"/>
+            <result property="hard" column="hard"/>
+            <result property="soft" column="soft"/>
+            <result property="oil" column="oil"/>
+        </association>
+
+
+    </resultMap>
+
+
+</mapper>
+
+

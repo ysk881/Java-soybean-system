@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kk.dao.BiologyMapper">
+
+    <!--根据品种查询,返回一个Variety-->
+    <select id="queryBybioName" resultMap="BiologyMap">
+        select *
+        from soybean.variety,
+             soybean.agronomic
+        where agronomic.name = #{Bname}
+          and variety.name = agronomic.name;
+    </select>
+
+    <!--导出全部生物学特征-->
+    <select id="getAllBiology" resultType="Biology">
+        select *
+        from soybean.agronomic
+    </select>
+    <!--全查询及模糊查询-->
+    <select id="getAllBiologyPage" resultType="Biology">
+        select *
+        from soybean.agronomic
+        <where>
+            <if test="name != null and name != ''">
+                name like '%${name}%'
+            </if>
+            <if test="habit != null and habit != ''">
+                and habit like '%${habit}%'
+            </if>
+        </where>
+        order by agid
+    </select>
+    <resultMap id="BiologyMap" type="Biology">
+        <id property="agid" column="agid"/>
+        <result property="name" column="name"/>
+        <result property="height" column="height"/>
+        <result property="pedicle" column="pedicle"/>
+        <result property="pod" column="pod"/>
+        <result property="branch" column="branch"/>
+        <result property="lodging" column="lodging"/>
+        <result property="biomass" column="biomass"/>
+        <result property="fertility" column="fertility"/>
+        <result property="habit" column="habit"/>
+        <result property="anthesis" column="anthesis"/>
+        <result property="afterbirth" column="afterbirth"/>
+        <result property="lifetime" column="lifetime"/>
+
+        <!--复杂的属性，我们需要单独处理
+        对象：association
+        集合：collection-->
+        <association property="variety" javaType="Variety">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="source" column="source"/>
+            <result property="yield" column="yield"/>
+            <result property="month" column="month"/>
+            <result property="rate" column="rate"/>
+            <result property="protect" column="protect"/>
+            <result property="area" column="area"/>
+            <result property="illness" column="illness"/>
+
+        </association>
+    </resultMap>
+
+    <!--修改生物学特征-->
+    <update id="updateBiology" parameterType="Biology">
+        update soybean.agronomic
+        set height     = #{height},
+            pedicle    = #{pedicle},
+            pod        = #{pod},
+            branch     = #{branch},
+            lodging    = #{lodging},
+            biomass    = #{biomass},
+            fertility  = #{fertility},
+            habit      = #{habit},
+            anthesis   = #{anthesis},
+            afterbirth = #{afterbirth},
+            lifetime   = #{lifetime}
+        where agid = #{agid};
+    </update>
+
+    <!--删除植物学特征-->
+    <update id="delectBio" parameterType="Biology">
+        update soybean.agronomic
+        set
+        height     = null,
+        pedicle    = null,
+        pod        = null,
+        branch     = null,
+        lodging    = null,
+        biomass    = null,
+        fertility  = null,
+        habit      = null,
+        anthesis   = null,
+        afterbirth = null,
+        lifetime   = null
+        where agid in
+        <foreach collection="list" item="agid" open="(" separator="," close=")">
+            #{agid}
+        </foreach>
+    </update>
+    <!--删除植物学特征-->
+    <update id="delectOneBio" parameterType="Biology">
+        update soybean.agronomic
+        set
+        height     = null,
+        pedicle    = null,
+        pod        = null,
+        branch     = null,
+        lodging    = null,
+        biomass    = null,
+        fertility  = null,
+        habit      = null,
+        anthesis   = null,
+        afterbirth = null,
+        lifetime   = null
+        where agid = #{agid}
+    </update>
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kk.dao.QualityMapper">
+
+    <!--根据id查询,返回一个Variety-->
+    <select id="queryByQname"  resultMap="QualityMap">
+        select *
+        from soybean.variety,
+             soybean.agronomic
+        where agronomic.name = #{Qname}
+          and variety.name = agronomic.name;
+    </select>
+
+    <!---查询全部品质性状-->
+    <select id="getAllQuality" resultType="Quality">
+        select *
+        from soybean.agronomic
+
+    </select>
+    <select id="getAllQualityPage" resultType="Quality">
+        select *
+        from soybean.agronomic
+        <where>
+            <if test="name != null and name != ''">
+                name like '%${name}%'
+            </if>
+            <if test="grain != null and grain != ''">
+                and grain like '%${grain}%'
+            </if>
+        </where>
+        order by agid
+    </select>
+    <resultMap id="QualityMap" type="Quality">
+        <id property="agid" column="agid"/>
+        <result property="name" column="name"/>
+        <result property="grain" column="grain"/>
+        <result property="grease" column="grease"/>
+        <result property="fat" column="fat"/>
+        <result property="protein" column="protein"/>
+        <result property="lipid" column="lipid"/>
+        <result property="salt" column="salt"/>
+        <result property="alkali" column="alkali"/>
+        <result property="cystine" column="cystine"/>
+        <result property="methionine" column="methionine"/>
+        <result property="hard" column="hard"/>
+        <result property="soft" column="soft"/>
+        <result property="oil" column="oil"/>
+
+        <!--复杂的属性，我们需要单独处理
+        对象：association
+        集合：collection-->
+        <association property="variety" javaType="Variety">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="source" column="source"/>
+            <result property="yield" column="yield"/>
+            <result property="month" column="month"/>
+            <result property="rate" column="rate"/>
+            <result property="protect" column="protect"/>
+            <result property="area" column="area"/>
+            <result property="illness" column="illness"/>
+
+        </association>
+    </resultMap>
+
+    <!--修改品质性状-->
+    <update id="updateQuality" parameterType="Quality">
+        update soybean.agronomic
+        set grain      = #{grain},
+            grease     = #{grease},
+            fat        = #{fat},
+            protein    = #{protein},
+            lipid      = #{lipid},
+            salt       = #{salt},
+            alkali     = #{alkali},
+            cystine    = #{cystine},
+            methionine = #{methionine},
+            hard       = #{hard},
+            soft       = #{soft},
+            oil        = #{oil}
+        where agid = #{agid};
+    </update>
+
+    <!--批量删除品质性状-->
+    <update id="delectQua" parameterType="Quality">
+        update soybean.agronomic
+        set
+        grain      = null,
+        grease     = null,
+        fat        = null,
+        protein    = null,
+        lipid      = null,
+        salt       = null,
+        alkali     = null,
+        cystine    = null,
+        methionine = null,
+        hard       = null,
+        soft       = null,
+        oil        = null
+        where agid in
+        <foreach collection="list" item="agid" open="(" separator="," close=")">
+            #{agid}
+        </foreach>
+    </update>
+
+    <!--删除单个品质性状-->
+    <update id="delectOneQua" parameterType="Quality">
+        update soybean.agronomic
+        set
+        grain      = null,
+        grease     = null,
+        fat        = null,
+        protein    = null,
+        lipid      = null,
+        salt       = null,
+        alkali     = null,
+        cystine    = null,
+        methionine = null,
+        hard       = null,
+        soft       = null,
+        oil        = null
+        where agid = #{agid}
+
+    </update>
+
+</mapper>

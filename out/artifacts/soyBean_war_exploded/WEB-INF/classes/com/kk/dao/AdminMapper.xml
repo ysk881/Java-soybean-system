@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kk.dao.AdminMapper">
+
+    <!--普通管理员登录-->
+    <select id="findByname" resultType="User">
+        select *
+        from user
+        where username = #{username}
+          and permission = '普通管理员'
+
+    </select>
+    <!--超级管理员登录-->
+    <select id="findByAdname" resultType="Admin">
+        select *
+        from admin
+        where username = #{username}
+    </select>
+    <!--根据查询管理员信息-->
+    <update id="updateNorPwd" parameterType="User">
+        update user
+        set password = #{password}
+    </update>
+    <!--修改超级管理员登录密码-->
+    <update id="updateAdminPwd" parameterType="Admin">
+        update admin
+        set password = #{password}
+    </update>
+    <!--查询全部用户-->
+    <select id="AllUser" resultType="User">
+        select *
+        from user
+        <where>
+            <if test="username != null and username != ''">
+                username like '%${username}%'
+            </if>
+            <if test="name != null and name != ''">
+                and name like '%${name}%'
+            </if>
+            <if test="permission = '用户'">
+                and permission = '用户'
+            </if>
+        </where>
+        order by usid
+    </select>
+
+    <!--查询全部普通管理员-->
+    <select id="AllNormalAdmin" resultType="User">
+        select *
+        from user
+        <where>
+            <if test="username != null and username != ''">
+                username like '%${username}%'
+            </if>
+            <if test="name != null and name != ''">
+                and name like '%${name}%'
+            </if>
+            <if test="permission = '普通管理员'">
+                and permission = '普通管理员'
+            </if>
+        </where>
+        order by usid
+    </select>
+
+    <!--查询全部用户权限-->
+    <select id="AllUserAuthority" resultType="User">
+        select *
+        from user
+        <where>
+            <if test="username != null and username != ''">
+                username like '%${username}%'
+            </if>
+            <if test="name != null and name != ''">
+                and name like '%${name}%'
+            </if>
+        </where>
+        order by usid
+    </select>
+
+
+    <!--添加用户-->
+    <insert id="addUser" parameterType="User">
+        insert into user(username, password, name, sex, email, phone, permission)
+        values (#{username}, #{password}, #{name}, #{sex}, #{email}, #{phone}, #{permission});
+    </insert>
+
+    <!--根据账号查询是否已存在该用户账号-->
+    <select id="selectAccount" resultType="User">
+        select *
+        from user
+        where username = #{account}
+    </select>
+
+    <!--批量删除-->
+    <delete id="deleteUser" parameterType="list">
+        delete from user where usid in
+        <foreach collection="list" item="usid" open="(" separator="," close=")">#{usid}</foreach>
+    </delete>
+    <!--删除用户-->
+    <delete id="deleteUserById" parameterType="int">
+        delete
+        from user
+        where usid = #{usid}
+    </delete>
+
+    <!--修改用户信息-->
+    <update id="updateUser" parameterType="User">
+        update user
+        set username = #{username},
+            password = #{password},
+            name     = #{name},
+            sex      = #{sex},
+            email    = #{email},
+            phone    = #{phone}
+        where usid = #{usid}
+    </update>
+
+    <!--修改用户信息-->
+    <update id="updateAuthority" parameterType="User">
+        update user
+        set username  = #{username},
+            name      = #{name},
+            permission= #{permission}
+        where usid = #{usid}
+    </update>
+    <!--导出全部用户信息表-->
+    <select id="queryAllUser" resultType="User">
+        select *
+        from user
+        where permission = '用户'
+    </select>
+
+    <!--导出全部普通管理员信息表-->
+    <select id="queryAllAdmin" resultType="User">
+        select *
+        from user
+        where permission = '普通管理员'
+    </select>
+
+    <!--导出全部用户信息表-->
+    <select id="queryAll" resultType="User">
+        select *
+        from user
+    </select>
+
+</mapper>

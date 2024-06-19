@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kk.dao.PhytologyMapper">
+    <!---查询全部植物学特征-->
+    <select id="getAllPhytologyPage" resultType="Phytology">
+        select *
+        from soybean.agronomic
+        <where>
+            <if test="name != null and name != ''">
+                name like '%${name}%'
+            </if>
+            <if test="flower != null and flower != ''">
+                and flower like '%${flower}%'
+            </if>
+        </where>
+        order by agid
+    </select>
+
+
+    <!--导出全部植物学特征-->
+    <select id="getAllPhytology" resultType="Phytology">
+        select *
+        from soybean.agronomic
+    </select>
+
+    <!--增加/更新Phy-->
+    <update id="updatePhytology" parameterType="Phytology">
+        update soybean.agronomic
+        set flower     = #{flower},
+            leaf       = #{leaf},
+            seed       = #{seed},
+            testa      = #{testa},
+            hilum      = #{hilum},
+            fuzz       = #{fuzz},
+            contyledon = #{contyledon}
+        where agid = #{agid};
+    </update>
+
+    <!--批量删除植物学特征-->
+    <update id="delectPhy" parameterType="Phytology">
+        update soybean.agronomic
+        set
+        flower = null,
+        leaf = null,
+        seed = null,
+        testa = null,
+        hilum = null,
+        fuzz = null,
+        contyledon =null
+        where agid in
+        <foreach collection="list" item="agid" open="(" separator="," close=")">
+            #{agid}
+        </foreach>
+    </update>
+    <!--删除单个植物学特征-->
+    <update id="delectOnePhy" parameterType="Phytology">
+        update soybean.agronomic
+        set
+        flower = null,
+        leaf = null,
+        seed = null,
+        testa = null,
+        hilum = null,
+        fuzz = null,
+        contyledon =null
+        where agid = #{agid}
+    </update>
+
+    <!--根据id查询,返回一个品种详情页-->
+    <select id="queryVarietyById" resultType="phytology">
+        select ph.agid,ph.name name,ph.flower,ph.leaf,ph.seed,ph.testa,ph.fuzz,ph.contyledon,
+               va.vname vname,va.source,va.yield,va.month,va.rate,va.protect,va.area,va.illness,va.image
+        from soybean.variety va,
+             soybean.agronomic ph
+        where agid = #{agid}
+              and ph.name = va.vname
+    </select>
+
+
+
+
+</mapper>

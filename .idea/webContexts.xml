@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/web/WEB-INF/jsp/admin/main.jsp" value="file://$PROJECT_DIR$/web/WEB-INF/jsp/admin" />
+        <entry key="file://$PROJECT_DIR$/web/WEB-INF/jsp/admin/phytology.jsp" value="file://$PROJECT_DIR$/web/WEB-INF/jsp/admin" />
+        <entry key="file://$PROJECT_DIR$/web/WEB-INF/jsp/super/biology.jsp" value="file://$PROJECT_DIR$/web/WEB-INF/jsp/super" />
+        <entry key="file://$PROJECT_DIR$/web/WEB-INF/jsp/super/main.jsp" value="file://$PROJECT_DIR$/web/WEB-INF/jsp/super" />
+        <entry key="file://$PROJECT_DIR$/web/WEB-INF/jsp/super/phytology.jsp" value="file://$PROJECT_DIR$/web/WEB-INF/jsp/super" />
+        <entry key="file://$PROJECT_DIR$/web/WEB-INF/jsp/super/user.jsp" value="file://$PROJECT_DIR$/web/WEB-INF/jsp/super" />
+        <entry key="file://$PROJECT_DIR$/web/WEB-INF/jsp/user/login.jsp" value="file://$PROJECT_DIR$/web/WEB-INF/jsp/user" />
+        <entry key="file://$PROJECT_DIR$/web/WEB-INF/jsp/user/register.jsp" value="file://$PROJECT_DIR$/web/WEB-INF/jsp/user" />
+        <entry key="file://$PROJECT_DIR$/web/WEB-INF/jsp/user/var.jsp" value="file://$PROJECT_DIR$/web/WEB-INF/jsp/user" />
+        <entry key="file://$PROJECT_DIR$/web/WEB-INF/jsp/user/varinfo.jsp" value="file://$PROJECT_DIR$/web/WEB-INF/jsp/user" />
+      </map>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kk.dao.UserMapper">
+    <!--登录-->
+    <select id="login" resultType="User">
+        select *
+        from user
+        where username = #{username}
+          and password = #{password};
+    </select>
+    <!--注册账号-->
+    <insert id="register" parameterType="User">
+        insert into user(username, password, name, sex, email, phone, permission)
+        values (#{username}, #{password}, #{name}, #{sex}, #{email}, #{phone}, #{permission});
+    </insert>
+    <!--根据用户名查询用户信息-->
+    <select id="queryUserName" resultType="User">
+        select *
+        from user
+        where username = #{username}
+    </select>
+    <!--修改用户信息-->
+    <update id="updateinfo" parameterType="User">
+        update user
+        set password = #{password}
+    </update>
+
+    <!--查看所品种-->
+    <select id="AllVariety" resultType="Variety">
+        select *
+        from soybean.variety
+        <where>
+            <if test="name!=null and name!=''">
+                name like '%${name}%'
+            </if>
+        </where>
+        order by id
+    </select>
+
+    <!--查看所有抗病毒性-->
+    <select id="AllIllness" resultType="Variety">
+        select *
+        from soybean.variety
+        <where>
+            <if test="illness!=null and illness!=''">
+                illness like '%${illness}%'
+            </if>
+        </where>
+        order by id
+    </select>
+
+    <!--查看所有品种来源-->
+    <select id="AllSource" resultType="Variety">
+        select *
+        from soybean.variety
+        <where>
+            <if test="source!=null and source!=''">
+                source like '%${source}%'
+            </if>
+        </where>
+        order by id
+    </select>
+
+    <!--查看所有品种适宜区域-->
+    <select id="AllArea" resultType="Variety">
+        select *
+        from soybean.variety
+        <where>
+            <if test="area!=null and area!=''">
+                area like '%${area}%'
+            </if>
+        </where>
+        order by id
+    </select>
+
+    <!--查询全部豆类科普知识信息-->
+    <select id="AllLagum" resultType="Know">
+        select *
+        from soybean.know
+        <where>
+            <if test="knsort = '豆类'">
+                and knsort = '豆类'
+            </if>
+        </where>
+        order by knid
+    </select>
+
+    <!--根据豆类id查询信息-->
+    <select id="KnowById" resultType="Know">
+        select *
+        from know
+        where knid = #{knid}
+    </select>
+
+    <!--查询全部农作物科普知识信息-->
+    <select id="AllCrop" resultType="Know">
+        select *
+        from soybean.know
+        <where>
+            <if test="knsort = '农作物'">
+                and knsort = '农作物'
+            </if>
+        </where>
+        order by knid
+    </select>
+
+
+    <!--查看所有植物学特征-->
+    <select id="AllPhytology" resultType="Phytology">
+        select * from soybean.agronomic
+        <where>
+            <if test="name!=null and name!=''">
+                name like '%${name}%'
+            </if>
+            <if test="flower!=null and flower!=''">
+                and flower like '%${flower}%'
+            </if>
+            <if test="leaf!=null and leaf!=''">
+                and leaf like '%${leaf}%'
+            </if>
+        </where>
+        order by agid
+    </select>
+
+    <!--查看所有生物学特征-->
+    <select id="AllBiology" resultType="Biology">
+        select * from soybean.agronomic
+        <where>
+            <if test="name!=null and name!=''">
+                name like '%${name}%'
+            </if>
+            <if test="height!=null and height!=''">
+                and height like '%${height}%'
+            </if>
+            <if test="habit!=null and habit!=''">
+                and habit like '%${habit}%'
+            </if>
+        </where>
+        order by agid
+    </select>
+    <!--查看所有品质性状-->
+    <select id="AllQuality" resultType="Quality">
+        select * from soybean.agronomic
+        <where>
+            <if test="name!=null and name!=''">
+                name like '%${name}%'
+            </if>
+            <if test="grain!=null and grain!=''">
+                and grain like '%${grain}%'
+            </if>
+            <if test="grease!=null and grease!=''">
+                and grease like '%${grease}%'
+            </if>
+        </where>
+        order by agid
+    </select>
+
+    <select id="queryPhyByNa" resultMap="VarietyMap">
+        select *
+        from soybean.variety,
+             soybean.agronomic
+        where agronomic.name = #{name}
+          and variety.name = agronomic.name;
+    </select>
+    <!--根据品种ID查询,返回一个Variety-->
+    <select id="queryVarById" resultMap="VarietyMap">
+        select *
+        from soybean.variety,
+             soybean.agronomic
+        where variety.id = #{id}
+          and variety.name = agronomic.name;
+    </select>
+    <!--结果映射标签、定义查询结果和返回类型之间的关联关系-->
+    <!--id属性表示这个映射关系的唯一标识、要求为一-->
+    <!--type属性表示返回的实体类-->
+    <!--property属性表示类中成员变量的名字-->
+    <!--column属性表示查询语句中字段的名字-->
+    <resultMap id="VarietyMap" type="Variety">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="source" column="source"/>
+        <result property="yield" column="yield"/>
+        <result property="month" column="month"/>
+        <result property="rate" column="rate"/>
+        <result property="protect" column="protect"/>
+        <result property="area" column="area"/>
+        <result property="illness" column="illness"/>
+        <result property="image" column="image"/>
+        <!--植物学-->
+        <association property="phytology" javaType="com.kk.pogo.Phytology">
+            <id property="agid" column="agid"/>
+            <result property="name" column="name"/>
+            <result property="flower" column="flower"/>
+            <result property="leaf" column="leaf"/>
+            <result property="seed" column="seed"/>
+            <result property="testa" column="testa"/>
+            <result property="hilum" column="hilum"/>
+            <result property="fuzz" column="fuzz"/>
+            <result property="contyledon" column="contyledon"/>
+        </association>
+        <!--生物学-->
+        <association property="biology" javaType="com.kk.pogo.Biology">
+            <id property="agid" column="agid"/>
+            <result property="name" column="name"/>
+            <result property="height" column="height"/>
+            <result property="pedicle" column="pedicle"/>
+            <result property="pod" column="pod"/>
+            <result property="branch" column="branch"/>
+            <result property="lodging" column="lodging"/>
+            <result property="biomass" column="biomass"/>
+            <result property="fertility" column="fertility"/>
+            <result property="habit" column="habit"/>
+            <result property="anthesis" column="anthesis"/>
+            <result property="afterbirth" column="afterbirth"/>
+            <result property="lifetime" column="lifetime"/>
+        </association>
+        <!--品质性状-->
+        <association property="quality" javaType="com.kk.pogo.Quality">
+            <id property="agid" column="agid"/>
+            <result property="name" column="name"/>
+            <result property="grain" column="grain"/>
+            <result property="grease" column="grease"/>
+            <result property="fat" column="fat"/>
+            <result property="protein" column="protein"/>
+            <result property="lipid" column="lipid"/>
+            <result property="salt" column="salt"/>
+            <result property="alkali" column="alkali"/>
+            <result property="cystine" column="cystine"/>
+            <result property="methionine" column="methionine"/>
+            <result property="hard" column="hard"/>
+            <result property="soft" column="soft"/>
+            <result property="oil" column="oil"/>
+        </association>
+
+
+    </resultMap>
+</mapper>

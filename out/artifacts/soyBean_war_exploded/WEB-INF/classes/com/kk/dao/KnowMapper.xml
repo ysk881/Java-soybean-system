@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kk.dao.KnowMapper">
+
+    <!--添加科普信息-->
+    <insert id="addKnow" parameterType="Know">
+        insert into know(knname, knspell, knalias, knimg, kninfo, kntrait, kngrow, knradius, kncultivate, knvalue,
+                         knsort)
+        values (#{knname}, #{knspell}, #{knalias},#{knimg}, #{kninfo}, #{kntrait}, #{kngrow}, #{knradius}, #{kncultivate},
+                #{knvalue}, #{knsort});
+
+    </insert>
+    <!--查看全部科普信息-->
+    <select id="findAllKnow" resultType="Know">
+        select * from know
+        <where>
+            <if test="knname!=null and knname!=''">
+                knname like '%${knname}%'
+            </if>
+        </where>
+        order by knid
+    </select>
+
+    <!--查看豆类科普信息-->
+    <select id="findLegumina" resultType="Know">
+        select * from know
+        <where>
+            <if test="knname != null and knname != ''">
+                knname like '%${knname}%'
+            </if>
+            <if test="knsort = '豆类'">
+                and knsort = '豆类'
+            </if>
+        </where>
+        order by knid
+    </select>
+
+    <!--查看全部农作物科普信息-->
+    <select id="findCrop" resultType="Know">
+        select * from know
+        <where>
+            <if test="knname!=null and knname!=''">
+                knname like '%${knname}%'
+            </if>
+            <if test="knsort = '农作物'">
+                and knsort = '农作物'
+            </if>
+        </where>
+        order by knid
+    </select>
+
+    <!--批量删除科普信息-->
+    <delete id="deleteKnows" parameterType="list">
+        delete from know where knid in
+        <foreach collection="list" item="knid" open="(" separator="," close=")">#{knid}</foreach>
+    </delete>
+    <!--删除科普信息-->
+    <delete id="deleteKnow" parameterType="int">
+        delete
+        from know
+        where knid = #{knid}
+    </delete>
+
+</mapper>
